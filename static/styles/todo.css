@@ -1,0 +1,23 @@
+body {
+    background-color: #f8f9fa;
+}
+.todo-container {
+    max-width: 500px;
+    margin: 100px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.todo-item.completed span {
+    text-decoration: line-through;
+    color: #6c757d;
+}
+.todo-actions button {
+    border: none;
+    background: none;
+    color: #6c757d;
+}
+.todo-actions button:hover {
+    color: #000;
+}
