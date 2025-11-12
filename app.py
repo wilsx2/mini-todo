@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, render_template
 
 app = Flask(__name__)
 
@@ -8,12 +8,11 @@ def root():
 
 @app.route("/login")
 def login():
-    return "<h1>hallo</h1>"
+    return render_template("login.html")
 
 @app.route("/list/<name>")
 def tdlist(name):
-    return f"Hello {name}"
-
+    return render_template("list.html", name= name)
 
 
 if __name__ == "__main__":
