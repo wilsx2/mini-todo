@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template
+from flask import Flask, redirect, url_for, render_template, request
 
 app = Flask(__name__)
 
@@ -6,13 +6,17 @@ app = Flask(__name__)
 def root():
     return redirect(url_for("login"))
 
-@app.route("/login")
+@app.route("/login", methods=["POST", "GET"])
 def login():
-    return render_template("login.html")
+    if request.method == "POST":
+        username = request.form["username"]
+        return redirect(url_for("tdlist", usr= username))
+    else:
+        return render_template("login.html")
 
-@app.route("/list/<name>")
-def tdlist(name):
-    return render_template("list.html", name= name)
+@app.route("/list/<usr>")
+def tdlist(usr):
+    return render_template("list.html", name= usr)
 
 
 if __name__ == "__main__":
