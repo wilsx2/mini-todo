@@ -20,25 +20,17 @@
         </div>
 
         <ul class="list-group" id="todo-list">
-            <li class="list-group-item d-flex justify-content-between align-items-center todo-item">
-                <div class="form-check d-flex align-items-center">
-                    <input class="form-check-input me-2" type="checkbox">
-                    <span contenteditable="true">Make functional</span>
-                </div>
-                <div class="todo-actions">
-                    <button class="delete-btn">&times;</button>
-                </div>
-            </li>
-
-            <li class="completed list-group-item d-flex justify-content-between align-items-center todo-item">
-                <div class="form-check d-flex align-items-center">
-                    <input class="form-check-input me-2" type="checkbox">
-                    <span contenteditable="true">Beautify</span>
-                </div>
-                <div class="todo-actions">
-                    <button class="delete-btn">&times;</button>
-                </div>
-            </li>
+            {% for todo in todos %}
+                <li class="{{'completed ' if todo.complete else ''}}list-group-item d-flex justify-content-between align-items-center todo-item">
+                    <div class="form-check d-flex align-items-center">
+                        <input class="form-check-input me-2" type="checkbox">
+                        <span contenteditable="true">{{todo.content}}</span>
+                    </div>
+                    <div class="todo-actions">
+                        <button class="delete-btn">&times;</button>
+                    </div>
+                </li>
+            {% endfor %}
         </ul>
 
         <small><a href="{{url_for('logout')}}">Sign Out</a></small>

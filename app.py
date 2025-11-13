@@ -1,6 +1,7 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import timedelta
 from flask_sqlalchemy import SQLAlchemy
+import uuid
 
 app = Flask(__name__)
 app.secret_key = "reallyfriggincoolman"
@@ -19,16 +20,16 @@ class users(db.Model):
         self.password = password
         
 class todo(db.Model):
-    _id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(32), primary_key=True)
     user = db.Column(db.String(64), nullable=False)
     content = db.Column(db.String(128), nullable=False)
     complete = db.Column(db.Boolean, nullable=False)
 
-    def __init__(self, id, user, content, complete):
-        self._id = id
+    def __init__(self, user, content):
+        self.id = str(uuid.uuid4())
         self.user = user
         self.content = content
-        self.complete = complete
+        self.complete = False
 
 @app.route("/")
 def root():
@@ -58,11 +59,19 @@ def login():
 
 @app.route("/list")
 def list():
-    if "user" in session:
-        user = session["user"]
-        return render_template("list.html", name= user)
-    flash("You are not logged in", "warning")
-    return redirect(url_for("login"))
+    if "user" not in session:
+        flash("You are not logged in", "warning")
+        return redirect(url_for("login"))
+    user = session["user"]
+
+    # add for test
+    item = todo(user, "Make app")
+    db.session.add(item)
+    db.session.commit()
+
+    todos = todo.query.filter_by(user= user).all()
+    return render_template("list.html", name= user, todos= todos)
+    
 
 @app.route("/logout")
 def logout():
