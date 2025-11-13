@@ -15,8 +15,8 @@
         <h3 class="mb-4">{{name}}'s To-Do</h3>
 
         <div class="input-group mb-3">
-        <input type="text" id="todo-input" class="form-control" placeholder="Add a new task...">
-        <button class="btn btn-primary" id="add-btn">Add</button>
+            <input type="text" id="todo-input" class="form-control" placeholder="Add a new task...">
+            <button class="btn btn-primary" id="add-btn">Add</button>
         </div>
 
         <ul class="list-group" id="todo-list">
@@ -40,5 +40,7 @@
                 </div>
             </li>
         </ul>
+
+        <small><a href="{{url_for('logout')}}">Sign Out</a></small>
     </div>
 {% endblock %}
