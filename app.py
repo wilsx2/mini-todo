@@ -46,7 +46,9 @@ def login():
             if found_user.password != password:
                 flash("Incorrect password", "danger");
                 return render_template("login.html")
+            flash("Signed in", "success")
         else:
+            flash("Created new account", "success")
             user = users(username, password)
             db.session.add(user)
             db.session.commit()
@@ -105,6 +107,25 @@ def remove(todo_id):
     else:
         flash("Todo not found", "danger")
     
+    return redirect(url_for("list"))
+
+@app.route("/change/<todo_id>", methods=["POST"])
+def change(todo_id):
+    if "user" not in session:
+        flash("You are not logged in", "warning")
+        return redirect(url_for("login"))
+    
+    content = request.form.get("content", "").strip()
+    if content:
+        item = todo.query.filter_by(id=todo_id, user=session["user"]).first()
+        if item:
+            item.content = content
+            db.session.commit()
+            flash("Todo modified", "success")
+        else:
+            flash("Todo not found", "danger")
+    else:
+        return redirect(url_for("remove", todo_id= todo_id))
     return redirect(url_for("list"))
 
 @app.route("/toggle/<todo_id>")

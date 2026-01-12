@@ -28,7 +28,9 @@
                         <form action="{{ url_for('toggle', todo_id=todo.id) }}" method="GET" style="display:inline-block;">
                             <input class="form-check-input me-2" type="checkbox" onChange="this.form.submit()">
                         </form>
-                        <span contenteditable="true">{{todo.content}}</span>
+                        <form action="{{ url_for('change', todo_id=todo.id) }}" method="POST" style="display:inline-block;">
+                            <input type="text" name="content" required id="todo-content" class="form-control-plaintext" value={{todo.content}} onblur="this.form.submit()">
+                        </form>
                     </div>
                     <div class="todo-actions">
                         <form action="{{ url_for('remove', todo_id=todo.id) }}" method="GET" style="display:inline-block;">
