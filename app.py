@@ -71,29 +71,57 @@ def list():
         return redirect(url_for("login"))
     user = session["user"]
 
-    # add for test
-    item = todo(user, "Make app")
-    db.session.add(item)
-    db.session.commit()
-
     todos = todo.query.filter_by(user= user).all()
     return render_template("list.html", name= user, todos= todos)
 
 @app.route("/add", methods=["POST"])
 def add():
-    print("Added")
+    if "user" not in session:
+        flash("You are not logged in", "warning")
+        return redirect(url_for("login"))
+    
+    content = request.form.get("content", "").strip()
+    if content:
+        item = todo(session["user"], content)
+        db.session.add(item)
+        db.session.commit()
+        flash("Todo added", "success")
+    else:
+        flash("Cannot add empty todo", "warning")
+    
     return redirect(url_for("list"))
 
 @app.route("/remove/<todo_id>")
 def remove(todo_id):
-    print("Remove")
+    if "user" not in session:
+        flash("You are not logged in", "warning")
+        return redirect(url_for("login"))
+    
+    item = todo.query.filter_by(id=todo_id, user=session["user"]).first()
+    if item:
+        db.session.delete(item)
+        db.session.commit()
+        flash("Todo deleted", "success")
+    else:
+        flash("Todo not found", "danger")
+    
     return redirect(url_for("list"))
 
 @app.route("/toggle/<todo_id>")
 def toggle(todo_id):
-    print("Toggle")
-    return redirect(url_for("list"))
+    if "user" not in session:
+        flash("You are not logged in", "warning")
+        return redirect(url_for("login"))
     
+    item = todo.query.filter_by(id=todo_id, user=session["user"]).first()
+    if item:
+        item.complete = not item.complete
+        db.session.commit()
+        flash("Todo updated", "success")
+    else:
+        flash("Todo not found", "danger")
+    
+    return redirect(url_for("list"))    
 
 if __name__ == "__main__":
     with app.app_context():
