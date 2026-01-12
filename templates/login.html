@@ -39,15 +39,7 @@
             />
         </div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for cat, msg in messages %}
-                    <div class="alert alert-{{cat}}" role="alert">
-                        {{msg}}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+        {{ alert_box() }}
 
         <div class="d-grid">
             <button type="submit" class="btn btn-primary">Login</button>
