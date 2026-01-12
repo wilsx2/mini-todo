@@ -15,19 +15,25 @@
         <h3 class="mb-4">{{name}}'s To-Do</h3>
 
         <div class="input-group mb-3">
-            <input type="text" id="todo-input" class="form-control" placeholder="Add a new task...">
-            <button class="btn btn-primary" id="add-btn">Add</button>
+            <form action="{{ url_for('add') }}" method="POST" style="display:inline-block;">
+                <input type="text" name="content" required id="todo-input" class="form-control" placeholder="Add a new task...">
+                <button type="submit" class="btn btn-primary" id="add-btn">Add</button>
+            </form>
         </div>
 
         <ul class="list-group" id="todo-list">
             {% for todo in todos %}
                 <li class="{{'completed ' if todo.complete else ''}}list-group-item d-flex justify-content-between align-items-center todo-item">
                     <div class="form-check d-flex align-items-center">
-                        <input class="form-check-input me-2" type="checkbox">
+                        <form action="{{ url_for('toggle', todo_id=todo.id) }}" method="GET" style="display:inline-block;">
+                            <input class="form-check-input me-2" type="checkbox" onChange="this.form.submit()">
+                        </form>
                         <span contenteditable="true">{{todo.content}}</span>
                     </div>
                     <div class="todo-actions">
-                        <button class="delete-btn">&times;</button>
+                        <form action="{{ url_for('remove', todo_id=todo.id) }}" method="GET" style="display:inline-block;">
+                            <button type="submit" class="delete-btn">&times;</button>
+                        </form>
                     </div>
                 </li>
             {% endfor %}

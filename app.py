@@ -56,6 +56,13 @@ def login():
         return redirect(url_for("list"))
     else:
         return render_template("login.html")
+    
+@app.route("/logout")
+def logout():
+    if "user" in session:
+        session.pop("user", None)
+        flash("You have been logged out", "info")
+    return redirect(url_for("login"))
 
 @app.route("/list")
 def list():
@@ -71,14 +78,22 @@ def list():
 
     todos = todo.query.filter_by(user= user).all()
     return render_template("list.html", name= user, todos= todos)
-    
 
-@app.route("/logout")
-def logout():
-    if "user" in session:
-        session.pop("user", None)
-        flash("You have been logged out", "info")
-    return redirect(url_for("login"))
+@app.route("/add", methods=["POST"])
+def add():
+    print("Added")
+    return redirect(url_for("list"))
+
+@app.route("/remove/<todo_id>")
+def remove(todo_id):
+    print("Remove")
+    return redirect(url_for("list"))
+
+@app.route("/toggle/<todo_id>")
+def toggle(todo_id):
+    print("Toggle")
+    return redirect(url_for("list"))
+    
 
 if __name__ == "__main__":
     with app.app_context():
